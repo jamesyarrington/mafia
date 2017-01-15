@@ -6,7 +6,7 @@ public class Action {
 	private Status targetStatus;
 	private Status actorStatus;
 	
-	public Action(Status startTargetStatus, Status startActorStatus) {
+	public Action(Status startActorStatus, Status startTargetStatus) {
 		targetStatus = startTargetStatus;
 		actorStatus = startActorStatus;
 	}

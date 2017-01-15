@@ -21,6 +21,7 @@ public class Player {
 		name = playerName;
 		actions = assignedRole.getActions();
 		team.addPlayer(this);
+		statuses = new ArrayList<Status>();
 	}
 	
 	// Return the faction from the team to which this player belongs.
@@ -81,5 +82,9 @@ public class Player {
 
 	public void setTarget(Player target) {
 		this.target = target;
+	}
+	
+	public void setSelectedAction(Action selectedAction) {
+		this.selectedAction = selectedAction;
 	}
 }

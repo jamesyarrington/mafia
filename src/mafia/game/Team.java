@@ -12,6 +12,7 @@ public class Team {
 	
 	public Team(Faction faction) {
 		this.faction = faction;
+		players = new ArrayList<Player>();
 	}
 	
 	// Add a Player to this team.
@@ -24,6 +25,10 @@ public class Team {
 	
 	public Faction getFaction() {
 		return faction;
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
 	}
 	
 }
