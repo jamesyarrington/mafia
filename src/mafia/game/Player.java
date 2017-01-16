@@ -7,19 +7,25 @@ import mafia.values.Status;
 
 public class Player {
 	
+	public interface PlayerFactory {
+		public Player createPlayer(String string, Role role);
+	}
+
 	private String name;
 	private Team team;
 	private ArrayList<Action> actions;
 	private Action selectedAction;
 	private Player target;
 	private ArrayList<Status> statuses;
+	private Role role;
 	
 	
 	// When the player is created, get Team and available Actions from provided Role
-	public Player(String playerName, Role assignedRole) {
-		team = assignedRole.getTeam();
+	public Player(String playerName, Role role) {
+		this.role = role;
+		team = role.getTeam();
 		name = playerName;
-		actions = assignedRole.getActions();
+		actions = role.getActions();
 		team.addPlayer(this);
 		statuses = new ArrayList<Status>();
 	}
@@ -55,6 +61,10 @@ public class Player {
 	
 	public String getName() {
 		return name;
+	}
+
+	public Role getRole() {
+		return role;
 	}
 
 	public Team getTeam() {
