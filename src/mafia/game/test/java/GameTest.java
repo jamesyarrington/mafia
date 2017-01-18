@@ -17,6 +17,7 @@ import org.mockito.ArgumentMatchers;
 
 import mafia.game.*;
 import mafia.game.Player.PlayerFactory;
+import mafia.values.Phase;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameTest {
@@ -85,5 +86,19 @@ public class GameTest {
 		for ( Player player : testedGame.getPlayers()) {
 			verify(player, times(1)).performAction();
 		}
+	}
+	
+	@Test
+	public void test_advance() {
+		assertEquals("Starts at 0", 0, testedGame.getTurn());
+		assertEquals("Starts with NIGHT", Phase.NIGHT, testedGame.getPhase());
+		testedGame.advance();
+		assertEquals("After one advance", 0, testedGame.getTurn());
+		assertEquals("After one advance", Phase.DAY, testedGame.getPhase());
+		for (int i=0; i<5; i++) {
+			testedGame.advance();
+		}
+		assertEquals("After six advances", 3, testedGame.getTurn());
+		assertEquals("After six advances", Phase.NIGHT, testedGame.getPhase());
 	}
 }
