@@ -39,7 +39,11 @@ public class GameTest {
 	@Mock
 	private PlayerFactory pf;
 	@Mock
-	private Player mockedPlayer;
+	private Player player_1;
+	@Mock
+	private Player player_2;
+	@Mock
+	private Player player_3;
 	
 	private ArrayList<Role> expectedRoles;
 
@@ -48,7 +52,7 @@ public class GameTest {
 		expectedRoles = new ArrayList<Role>();
 		actualRoles = new ArrayList<Role>();
 		actualPlayerNames = new ArrayList<String>();
-		when(pf.createPlayer(ArgumentMatchers.anyString(), ArgumentMatchers.any(Role.class))).thenReturn(mockedPlayer);
+		when(pf.createPlayer(ArgumentMatchers.anyString(), ArgumentMatchers.any(Role.class))).thenReturn(player_1, player_2, player_3);
 		expectedRoles.add(role_1);
 		expectedRoles.add(role_2);
 		expectedRoles.add(role_3);
@@ -77,7 +81,9 @@ public class GameTest {
 	@Test
 	public void test_performActions() {
 		testedGame.assignRoles();
-		
+		testedGame.performActions();
+		for ( Player player : testedGame.getPlayers()) {
+			verify(player, times(1)).performAction();
+		}
 	}
-
 }
