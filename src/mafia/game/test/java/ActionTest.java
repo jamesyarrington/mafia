@@ -3,6 +3,7 @@
  */
 package mafia.game.test.java;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import mafia.game.*;
@@ -20,18 +21,26 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class ActionTest {
 	
 	private Action testedAction;
+
+	private Status testedValidStatus = Status.BLOCKED;
+	private Status testedInvalidStatus = Status.tobeKILLED;
+	private Phase testedValidPhase = Phase.NIGHT;
+	private Phase testedInvalidPhase = Phase.DAY;
+	
 	
 	@Mock
 	private Player mockedActor;
 	@Mock
 	private Player mockedTarget;
+	@Mock
+	private Game mockedGame;
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		testedAction = new Action(Status.tobeKILLED, Status.DEAD);
+		testedAction = new Action(Status.tobeKILLED, Status.DEAD, testedValidStatus, testedInvalidStatus, testedValidPhase, mockedGame);
 	}
 
 	/**
@@ -43,15 +52,26 @@ public class ActionTest {
 	}
 
 	@Test
-	public void actor_status_updated_after_execute() throws Exception{
+	public void test_execute() {
 		testedAction.execute(mockedActor, mockedTarget);
 		verify(mockedActor).addStatus(Status.tobeKILLED);
+		verify(mockedTarget).addStatus(Status.DEAD);
 	}
 	
 	@Test
-	public void target_status_updated_after_execute() throws Exception {
-		testedAction.execute(mockedActor, mockedTarget);
-		verify(mockedTarget).addStatus(Status.DEAD);
+	public void test_checkIfValid() {
+		
+		// True case, Missing Valid Case, Has Invalid Case, Both Bad Case
+		when(mockedTarget.hasStatus(testedValidStatus)).thenReturn(true, false, true, false, true);
+		when(mockedTarget.hasStatus(testedInvalidStatus)).thenReturn(false, false, true, true, false);
+		when(mockedGame.getPhase()).thenReturn(testedValidPhase);
+		assertTrue("When target has valid status and not invalid status", testedAction.checkIfValid(mockedTarget));
+		assertFalse("When target has neither valid status nor invalid status", testedAction.checkIfValid(mockedTarget));
+		assertFalse("When target has valid status and invalid status", testedAction.checkIfValid(mockedTarget));
+		assertFalse("When target has invalid status and not valid status", testedAction.checkIfValid(mockedTarget));
+		when(mockedGame.getPhase()).thenReturn(testedInvalidPhase);
+		assertFalse("When game is in invalid phase for action", testedAction.checkIfValid(mockedTarget));
+		
 	}
 
 }

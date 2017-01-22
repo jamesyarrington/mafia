@@ -8,11 +8,12 @@ import mafia.values.Status;
 public class Player {
 	
 	public interface PlayerFactory {
-		public Player createPlayer(String string, Role role);
+		public Player createPlayer(String playerName, Role role, Game game);
 	}
 
 	private String name;
 	private Team team;
+	private Game game;
 	private ArrayList<Action> actions;
 	private Action selectedAction;
 	private Player target;
@@ -21,8 +22,9 @@ public class Player {
 	
 	
 	// When the player is created, get Team and available Actions from provided Role
-	public Player(String playerName, Role role) {
+	public Player(String playerName, Role role, Game game) {
 		this.role = role;
+		this.game = game;
 		team = role.getTeam();
 		name = playerName;
 		actions = role.getActions();
@@ -38,6 +40,27 @@ public class Player {
 	// Perform the action the player has selected.
 	public void performAction() {
 		selectedAction.execute(this,target);
+	}
+	
+	// Set the next action for the player.
+	public boolean chooseAction(Action selectedAction, Player target) {
+		if (selectedAction.checkIfValid(target)) {
+			this.selectedAction = selectedAction;
+			this.target = target;
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public ArrayList<Player> getValidTargets(Action potentialAction) {
+		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
+		for (Player player : game.getPlayers()) {
+			if (potentialAction.checkIfValid(player)) {
+				returnedPlayerArrayList.add(player);
+			}
+		}
+		return returnedPlayerArrayList;
 	}
 	
 	
@@ -79,7 +102,7 @@ public class Player {
 		return selectedAction;
 	}
 
-	public Player getSelectedPlayer() {
+	public Player getTarget() {
 		return target;
 	}
 
@@ -89,12 +112,4 @@ public class Player {
 	
 	
 	// Setters:
-
-	public void setTarget(Player target) {
-		this.target = target;
-	}
-	
-	public void setSelectedAction(Action selectedAction) {
-		this.selectedAction = selectedAction;
-	}
 }

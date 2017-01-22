@@ -27,7 +27,7 @@ public class Game {
 	public void assignRoles() {
 		Collections.shuffle(roles);
 		for (int i = 0; i < playerNames.length; i++) {
-			addPlayer(pf.createPlayer(playerNames[i], roles.get(i)));
+			addPlayer(pf.createPlayer(playerNames[i], roles.get(i), this));
 		}
 	}
 

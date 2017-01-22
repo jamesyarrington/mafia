@@ -29,6 +29,7 @@ public class GameTest {
 	private ArrayList<Role> actualRoles;
 	private ArgumentCaptor<String> capturePlayerNames = ArgumentCaptor.forClass(String.class);
 	private ArgumentCaptor<Role> captureRoles = ArgumentCaptor.forClass(Role.class);
+	private ArgumentCaptor<Game> captureGame = ArgumentCaptor.forClass(Game.class);
 	
 	
 	@Mock
@@ -53,7 +54,7 @@ public class GameTest {
 		expectedRoles = new ArrayList<Role>();
 		actualRoles = new ArrayList<Role>();
 		actualPlayerNames = new ArrayList<String>();
-		when(pf.createPlayer(ArgumentMatchers.anyString(), ArgumentMatchers.any(Role.class))).thenReturn(player_1, player_2, player_3);
+		when(pf.createPlayer(ArgumentMatchers.anyString(), ArgumentMatchers.any(Role.class), ArgumentMatchers.any(Game.class))).thenReturn(player_1, player_2, player_3);
 		expectedRoles.add(role_1);
 		expectedRoles.add(role_2);
 		expectedRoles.add(role_3);
@@ -69,7 +70,7 @@ public class GameTest {
 	@Test
 	public void test_assignRoles() {
 		testedGame.assignRoles();
-		verify(pf, times(3)).createPlayer(capturePlayerNames.capture(), captureRoles.capture());
+		verify(pf, times(3)).createPlayer(capturePlayerNames.capture(), captureRoles.capture(), captureGame.capture());
 		actualPlayerNames = new ArrayList<String>(capturePlayerNames.getAllValues());
 		actualRoles = new ArrayList<Role>(captureRoles.getAllValues());
 		expectedPlayerNamesList = new ArrayList<String>(Arrays.asList(expectedPlayerNames));
@@ -93,7 +94,7 @@ public class GameTest {
 		assertEquals("Starts at 0", 0, testedGame.getTurn());
 		assertEquals("Starts with NIGHT", Phase.NIGHT, testedGame.getPhase());
 		testedGame.advance();
-		assertEquals("After one advance", 0, testedGame.getTurn());
+		assertEquals("After one advance", 1, testedGame.getTurn());
 		assertEquals("After one advance", Phase.DAY, testedGame.getPhase());
 		for (int i=0; i<5; i++) {
 			testedGame.advance();
