@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import mafia.game.Player.PlayerFactory;
 import mafia.values.Phase;
+import mafia.values.Status;
 
 public class Game {
 
@@ -45,6 +46,18 @@ public class Game {
 			turn++;
 			phase = Phase.DAY;
 		}
+	}
+	
+	// Kill all players that are "tobeKILLED", and return that list.
+	public ArrayList<Player> killPlayers() {
+		ArrayList<Player> killedPlayers = new ArrayList<Player>();
+		for (Player player : players) {
+			if (player.removeStatus(Status.tobeKILLED)) {
+				player.addStatus(Status.DEAD);
+				killedPlayers.add(player);
+			}
+		}
+		return killedPlayers;
 	}
 	
 	// Setters:

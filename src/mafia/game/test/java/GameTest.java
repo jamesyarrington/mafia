@@ -18,6 +18,7 @@ import org.mockito.ArgumentMatchers;
 import mafia.game.*;
 import mafia.game.Player.PlayerFactory;
 import mafia.values.Phase;
+import mafia.values.Status;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameTest {
@@ -101,5 +102,17 @@ public class GameTest {
 		}
 		assertEquals("After six advances", 3, testedGame.getTurn());
 		assertEquals("After six advances", Phase.NIGHT, testedGame.getPhase());
+	}
+	
+	@Test
+	public void test_killPlayers() {
+		testedGame.assignRoles();
+		when(player_1.removeStatus(Status.tobeKILLED)).thenReturn(true);
+		when(player_2.removeStatus(Status.tobeKILLED)).thenReturn(false);
+		when(player_3.removeStatus(Status.tobeKILLED)).thenReturn(true);
+		assertEquals(new ArrayList<Player>(Arrays.asList(player_1, player_3)), testedGame.killPlayers());
+		verify(player_1).addStatus(Status.DEAD);
+		verify(player_3).addStatus(Status.DEAD);
+		verify(player_2, never()).addStatus(Status.DEAD);
 	}
 }

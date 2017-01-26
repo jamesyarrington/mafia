@@ -19,12 +19,14 @@ public class Player {
 	private Player target;
 	private ArrayList<Status> statuses;
 	private Role role;
+	private String dailyMessage;
 	
 	
 	// When the player is created, get Team and available Actions from provided Role
 	public Player(String playerName, Role role, Game game) {
 		this.role = role;
 		this.game = game;
+		this.dailyMessage = "";
 		team = role.getTeam();
 		name = playerName;
 		actions = role.getActions();
@@ -61,6 +63,13 @@ public class Player {
 			}
 		}
 		return returnedPlayerArrayList;
+	}
+	
+	// Return the daily message, and then reinitialize it.
+	public String retrieveDailyMessage() {
+		String retrievedMessage = dailyMessage;
+		dailyMessage = "";
+		return retrievedMessage;
 	}
 	
 	

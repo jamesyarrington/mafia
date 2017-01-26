@@ -27,7 +27,7 @@ public class Action {
 		target.addStatus(targetStatus);
 	}
 	
-	//
+	// Return true if the player is a valid target for this action.
 	public boolean checkIfValid(Player target) {
 		boolean chkValidStatus;
 		boolean chkInvalidStatus;
