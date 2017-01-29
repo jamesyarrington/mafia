@@ -6,10 +6,6 @@ import mafia.values.Faction;
 import mafia.values.Status;
 
 public class Player {
-	
-	public interface PlayerFactory {
-		public Player createPlayer(String playerName, Role role, Game game);
-	}
 
 	private String name;
 	private Team team;
@@ -21,16 +17,15 @@ public class Player {
 	private Role role;
 	private String dailyMessage;
 	
-	
 	// When the player is created, get Team and available Actions from provided Role
 	public Player(String playerName, Role role, Game game) {
 		this.role = role;
 		this.game = game;
 		this.dailyMessage = "";
-		team = role.getTeam();
+//		team = role.getTeam();  // TODO: Return team-related actions
+//		team.addPlayer(this);
 		name = playerName;
 		actions = role.getActions();
-		team.addPlayer(this);
 		statuses = new ArrayList<Status>();
 	}
 	

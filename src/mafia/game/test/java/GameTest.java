@@ -16,7 +16,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 
 import mafia.game.*;
-import mafia.game.Player.PlayerFactory;
+import mafia.game.PlayerFactory;
 import mafia.values.Phase;
 import mafia.values.Status;
 

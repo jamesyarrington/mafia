@@ -3,7 +3,7 @@ package mafia.game;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import mafia.game.Player.PlayerFactory;
+import mafia.game.PlayerFactory;
 import mafia.values.Phase;
 import mafia.values.Status;
 

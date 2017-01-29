@@ -2,20 +2,27 @@ package mafia.game;
 
 import java.util.ArrayList;
 
+import mafia.values.Faction;
+
 public class Role {
-	private Team team;
+	private Faction faction;
 	private ArrayList<Action> actions;
 	
-	public Role(Team startTeam, ArrayList<Action> startActions) {
-		team = startTeam;
-		actions = startActions;
+	public Role(Faction faction, ArrayList<Action> actions) {
+		this.faction = faction;
+		this.actions = actions;
+	}
+	
+	// To be overwritten by the invalid Role.
+	public boolean isValid() {
+		return true;
 	}
 
 	
 	// Getters:
 	
-	public Team getTeam() {
-		return team;
+	public Faction getFaction() {
+		return faction;
 	}
 
 	public ArrayList<Action> getActions() {
