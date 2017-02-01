@@ -1,4 +1,8 @@
-package mafia.game;
+package mafia.factory;
+
+import mafia.game.Game;
+import mafia.game.Player;
+import mafia.game.Role;
 
 public class PlayerFactory {
 	

@@ -1,7 +1,9 @@
-package mafia.game;
+package mafia.factory;
 
 import java.util.ArrayList;
 
+import mafia.game.Action;
+import mafia.game.Role;
 import mafia.values.Faction;
 import mafia.values.RoleOption;
 

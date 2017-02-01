@@ -3,13 +3,13 @@ package runner.cl;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import mafia.factory.PlayerFactory;
+import mafia.factory.RoleFactory;
 import mafia.game.*;
-import mafia.game.PlayerFactory;
-import mafia.game.RoleFactory;
+import mafia.values.Faction;
 import mafia.values.RoleOption;
 
 public class App {
-	private static RoleFactory rf;
 	private static PlayerFactory pf = new PlayerFactory();
 	private static Game game;
 	
@@ -24,6 +24,12 @@ public class App {
 		game.setPlayerNames(names);
 		game.setRoles(roles);
 		game.assignRoles();
+		while (isWinner(game.checkForWinner())) {
+			
+			game.performActions();
+			game.killPlayers();
+			game.advance();
+		}
 		
 		reader.close();
 	}
@@ -75,6 +81,39 @@ public class App {
 		int itemNo = 1;
 		for (RoleOption opt : RoleOption.values()) {
 			System.out.println(itemNo + ". " + opt.name());
+			itemNo++;
+		}
+	}
+	
+	// Display the winner, if there was one.  Return false unless there is a winner.
+	private static boolean isWinner(Faction faction) {
+		if (faction == Faction.MAFIA) {
+			System.out.println("The mafia has won!");
+		} else if (faction == Faction.TOWN) {
+			System.out.println("The town has won!");
+		} else if (faction == Faction.NONE) {
+			System.out.println("No one wins :(");
+		}
+		return faction == null;
+	}
+	
+	// Ask each player for an action:
+	private static void promptPlayers(Game game) {
+		for (Player player : game.getLivingPlayers()) {
+			
+		}
+	}
+	
+	// Prompt a single player for an action:
+	private static void promptForAction(Player player) {
+		System.out.println(player.getName() + ", Choose your action:");
+		displayActions(player.getActions());
+	}
+	
+	private static void displayActions(ArrayList<Action> actions) {
+		int itemNo = 1;
+		for (Action action : actions) {
+			System.out.println(itemNo + ". " + action.getName());
 			itemNo++;
 		}
 	}

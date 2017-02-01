@@ -4,6 +4,7 @@ import mafia.values.Phase;
 import mafia.values.Status;
 
 public class Action {
+	private String name;
 	private Status validTargetStatus;
 	private Status invalidTargetStatus;
 	private Phase validPhase;
@@ -44,5 +45,10 @@ public class Action {
 		}
 		chkValidPhase = game.getPhase() == validPhase;
 		return chkValidStatus && chkInvalidStatus && chkValidPhase;
+	}
+
+
+	public String getName() {
+		return name;
 	}
 }

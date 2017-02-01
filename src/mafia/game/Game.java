@@ -3,7 +3,8 @@ package mafia.game;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import mafia.game.PlayerFactory;
+import mafia.factory.PlayerFactory;
+import mafia.values.Faction;
 import mafia.values.Phase;
 import mafia.values.Status;
 
@@ -30,6 +31,44 @@ public class Game {
 		for (int i = 0; i < playerNames.length; i++) {
 			addPlayer(pf.createPlayer(playerNames[i], roles.get(i), this));
 		}
+	}
+	
+	// Check the factions of the living players to see if there are any winners.
+	public Faction checkForWinner() {
+		// Determine Current Composition
+		int numMafia = getPlayerCount(Faction.MAFIA);
+		int numTown = getPlayerCount(Faction.TOWN);
+		if (numMafia == 0 && numTown > 0) {
+			return Faction.TOWN;
+		} else if (numMafia >= numTown && numMafia > 0) {
+			return Faction.MAFIA;
+		} else if (numMafia == 0 && numTown == 0) {
+			return Faction.NONE;
+		} else {
+			return null;
+		}
+	}
+	
+	// Get the number of living players that belong to a given faction.
+	public int getPlayerCount(Faction faction) {
+		int count = 0;
+		for (Player player : getLivingPlayers()) {
+			if (player.getFaction() == faction) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	// Return an ArrayList of players that are not dead.
+	public ArrayList<Player> getLivingPlayers() {
+		ArrayList<Player> livingPlayers = new ArrayList<Player>();
+		for (Player player : players) {
+			if (!player.hasStatus(Status.DEAD)) {
+				livingPlayers.add(player);
+			}
+		}
+		return livingPlayers;
 	}
 
 	// Iterate through all players, performing their selected actions.

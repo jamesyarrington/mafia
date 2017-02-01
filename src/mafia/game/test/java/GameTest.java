@@ -15,8 +15,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 
+import mafia.factory.PlayerFactory;
 import mafia.game.*;
-import mafia.game.PlayerFactory;
+import mafia.values.Faction;
 import mafia.values.Phase;
 import mafia.values.Status;
 
@@ -31,8 +32,7 @@ public class GameTest {
 	private ArgumentCaptor<String> capturePlayerNames = ArgumentCaptor.forClass(String.class);
 	private ArgumentCaptor<Role> captureRoles = ArgumentCaptor.forClass(Role.class);
 	private ArgumentCaptor<Game> captureGame = ArgumentCaptor.forClass(Game.class);
-	
-	
+		
 	@Mock
 	private Role role_1;
 	@Mock
@@ -114,5 +114,59 @@ public class GameTest {
 		verify(player_1).addStatus(Status.DEAD);
 		verify(player_3).addStatus(Status.DEAD);
 		verify(player_2, never()).addStatus(Status.DEAD);
+	}
+	
+	@Test
+	public void test_getLivingPlayers() {
+		testedGame.assignRoles();
+		when(player_1.hasStatus(Status.DEAD)).thenReturn(false);
+		when(player_2.hasStatus(Status.DEAD)).thenReturn(true);
+		when(player_3.hasStatus(Status.DEAD)).thenReturn(false);
+		assertEquals(new ArrayList<Player>(Arrays.asList(player_1, player_3)), testedGame.getLivingPlayers());
+	}
+	
+	@Test
+	public void test_getPlayerCount_Faction() {
+		testedGame.assignRoles();
+		when(player_1.hasStatus(Status.DEAD)).thenReturn(false);
+		when(player_2.hasStatus(Status.DEAD)).thenReturn(false);
+		when(player_3.hasStatus(Status.DEAD)).thenReturn(false);
+		when(player_1.getFaction()).thenReturn(Faction.MAFIA);
+		when(player_2.getFaction()).thenReturn(Faction.TOWN);
+		when(player_3.getFaction()).thenReturn(Faction.MAFIA);
+		assertEquals(2, testedGame.getPlayerCount(Faction.MAFIA));
+		assertEquals(1, testedGame.getPlayerCount(Faction.TOWN));
+	}
+	
+	@Test
+	public void test_checkForWinner() {
+		testedGame.assignRoles();
+		when(player_1.hasStatus(Status.DEAD)).thenReturn(false);
+		when(player_2.hasStatus(Status.DEAD)).thenReturn(false);
+		when(player_3.hasStatus(Status.DEAD)).thenReturn(false);
+		
+		// Town wins:
+		when(player_1.getFaction()).thenReturn(Faction.TOWN, Faction.TOWN);
+		when(player_2.getFaction()).thenReturn(Faction.TOWN, Faction.TOWN);
+		when(player_3.getFaction()).thenReturn(Faction.TOWN, Faction.TOWN);
+		assertEquals("3T - 0M, town wins", Faction.TOWN, testedGame.checkForWinner());
+		
+		// Mafia wins:
+		when(player_1.getFaction()).thenReturn(Faction.MAFIA, Faction.MAFIA);
+		when(player_2.getFaction()).thenReturn(Faction.MAFIA, Faction.MAFIA);
+		when(player_3.getFaction()).thenReturn(Faction.TOWN, Faction.TOWN);
+		assertEquals("1T - 2M, mafia wins", Faction.MAFIA, testedGame.checkForWinner());
+		
+		// No winners yet:
+		when(player_1.getFaction()).thenReturn(Faction.MAFIA, Faction.MAFIA);
+		when(player_2.getFaction()).thenReturn(Faction.TOWN, Faction.TOWN);
+		when(player_3.getFaction()).thenReturn(Faction.TOWN, Faction.TOWN);
+		assertEquals("2T - 1M, no winners", null, testedGame.checkForWinner());
+		
+		// Everyone dead:
+		when(player_1.hasStatus(Status.DEAD)).thenReturn(true);
+		when(player_2.hasStatus(Status.DEAD)).thenReturn(true);
+		when(player_3.hasStatus(Status.DEAD)).thenReturn(true);
+		assertEquals("0T - 0M, no winners", Faction.NONE, testedGame.checkForWinner());
 	}
 }
