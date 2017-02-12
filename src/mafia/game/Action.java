@@ -1,10 +1,12 @@
 package mafia.game;
 
+import java.util.ArrayList;
+
 import mafia.values.Phase;
 import mafia.values.Status;
 
 public class Action {
-	private String name;
+	protected String name;
 	private Status validTargetStatus;
 	private Status invalidTargetStatus;
 	private Phase validPhase;
@@ -20,6 +22,9 @@ public class Action {
 		this.validPhase = validPhase;
 		this.game = game;
 	}
+	public Action(Game game) {
+		this.game = game;
+	}
 	
 	
 	// Apply the appropriate status to the player performing the action, and that player's target.
@@ -29,7 +34,7 @@ public class Action {
 	}
 	
 	// Return true if the player is a valid target for this action.
-	public boolean checkIfValid(Player target) {
+	public boolean checkIfValidTarget(Player target) {
 		boolean chkValidStatus;
 		boolean chkInvalidStatus;
 		boolean chkValidPhase;
@@ -43,12 +48,25 @@ public class Action {
 		} else {
 			chkInvalidStatus = !target.hasStatus(invalidTargetStatus);
 		}
-		chkValidPhase = game.getPhase() == validPhase;
-		return chkValidStatus && chkInvalidStatus && chkValidPhase;
+		return chkValidStatus && chkInvalidStatus;
+	}
+	
+	public ArrayList<Player> getValidTargets() {
+		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
+		for (Player player : game.getPlayers()) {
+			if (checkIfValidTarget(player)) {
+				returnedPlayerArrayList.add(player);
+			}
+		}
+		return returnedPlayerArrayList;
+	}
+	
+	public boolean checkIfValidPhase() {
+		return game.getPhase() == validPhase;
 	}
 
-
-	public String getName() {
+	@Override
+	public String toString() {
 		return name;
 	}
 }

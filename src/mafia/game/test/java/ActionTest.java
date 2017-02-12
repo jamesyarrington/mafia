@@ -65,12 +65,12 @@ public class ActionTest {
 		when(mockedTarget.hasStatus(testedValidStatus)).thenReturn(true, false, true, false, true);
 		when(mockedTarget.hasStatus(testedInvalidStatus)).thenReturn(false, false, true, true, false);
 		when(mockedGame.getPhase()).thenReturn(testedValidPhase);
-		assertTrue("When target has valid status and not invalid status", testedAction.checkIfValid(mockedTarget));
-		assertFalse("When target has neither valid status nor invalid status", testedAction.checkIfValid(mockedTarget));
-		assertFalse("When target has valid status and invalid status", testedAction.checkIfValid(mockedTarget));
-		assertFalse("When target has invalid status and not valid status", testedAction.checkIfValid(mockedTarget));
+		assertTrue("When target has valid status and not invalid status", testedAction.checkIfValidTarget(mockedTarget));
+		assertFalse("When target has neither valid status nor invalid status", testedAction.checkIfValidTarget(mockedTarget));
+		assertFalse("When target has valid status and invalid status", testedAction.checkIfValidTarget(mockedTarget));
+		assertFalse("When target has invalid status and not valid status", testedAction.checkIfValidTarget(mockedTarget));
 		when(mockedGame.getPhase()).thenReturn(testedInvalidPhase);
-		assertFalse("When game is in invalid phase for action", testedAction.checkIfValid(mockedTarget));
+		assertFalse("When game is in invalid phase for action", testedAction.checkIfValidTarget(mockedTarget));
 		
 	}
 

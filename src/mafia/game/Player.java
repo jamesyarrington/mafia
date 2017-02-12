@@ -8,7 +8,8 @@ import mafia.values.Status;
 public class Player {
 
 	private String name;
-	private Team team;
+	private Faction faction;
+//	private Team team;
 	private Game game;
 	private ArrayList<Action> actions;
 	private Action selectedAction;
@@ -24,14 +25,18 @@ public class Player {
 		this.dailyMessage = "";
 //		team = role.getTeam();  // TODO: Return team-related actions
 //		team.addPlayer(this);
+		faction = role.getFaction();
 		name = playerName;
 		actions = role.getActions();
 		statuses = new ArrayList<Status>();
 	}
+	public Player() {
+		name = "No Target";
+	}
 	
 	// Return the faction from the team to which this player belongs.
 	public Faction getFaction() {
-		return team.getFaction();
+		return faction;
 	}
 
 	// Perform the action the player has selected.
@@ -41,7 +46,7 @@ public class Player {
 	
 	// Set the next action for the player.
 	public boolean chooseAction(Action selectedAction, Player target) {
-		if (selectedAction.checkIfValid(target)) {
+		if (selectedAction.checkIfValidTarget(target)) {
 			this.selectedAction = selectedAction;
 			this.target = target;
 			return true;
@@ -53,11 +58,21 @@ public class Player {
 	public ArrayList<Player> getValidTargets(Action potentialAction) {
 		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
 		for (Player player : game.getPlayers()) {
-			if (potentialAction.checkIfValid(player)) {
+			if (potentialAction.checkIfValidTarget(player)) {
 				returnedPlayerArrayList.add(player);
 			}
 		}
 		return returnedPlayerArrayList;
+	}
+	
+	public ArrayList<Action> getValidActions() {
+		ArrayList<Action> validActions = new ArrayList<Action>();
+		for (Action action : actions) {
+			if (action.checkIfValidPhase()) {
+				validActions.add(action);
+			}
+		}
+		return validActions;
 	}
 	
 	// Return the daily message, and then reinitialize it.
@@ -65,6 +80,10 @@ public class Player {
 		String retrievedMessage = dailyMessage;
 		dailyMessage = "";
 		return retrievedMessage;
+	}
+	
+	public String toString() {
+		return name;
 	}
 	
 	
@@ -94,9 +113,9 @@ public class Player {
 		return role;
 	}
 
-	public Team getTeam() {
-		return team;
-	}
+//	public Team getTeam() {
+//		return team;
+//	}
 
 	public ArrayList<Action> getActions() {
 		return actions;

@@ -78,7 +78,7 @@ public class PlayerTest {
 	
 	@Test
 	public void test_performAction() {
-		when(mockedSelectedAction.checkIfValid(targetPlayer)).thenReturn(true);
+		when(mockedSelectedAction.checkIfValidTarget(targetPlayer)).thenReturn(true);
 		testedPlayer.chooseAction(mockedSelectedAction, targetPlayer);
 		testedPlayer.performAction();
 		verify(mockedSelectedAction).execute(testedPlayer, targetPlayer);
@@ -104,7 +104,7 @@ public class PlayerTest {
 	
 	@Test
 	public void test_chooseAction() {
-		when(mockedSelectedAction.checkIfValid(targetPlayer)).thenReturn(false, true);
+		when(mockedSelectedAction.checkIfValidTarget(targetPlayer)).thenReturn(false, true);
 		assertFalse("When action reports invalid", testedPlayer.chooseAction(mockedSelectedAction, targetPlayer));
 		assertEquals("When action reports invalid", testedPlayer.getSelectedAction(), null);
 		assertEquals("When action reports invalid", testedPlayer.getTarget(), null);
@@ -116,9 +116,9 @@ public class PlayerTest {
 	@Test
 	public void test_getValidTargets() {
 		expectedValidTargets = new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_3));
-		when(mockedSelectedAction.checkIfValid(potentialTarget_1)).thenReturn(true);
-		when(mockedSelectedAction.checkIfValid(potentialTarget_2)).thenReturn(false);
-		when(mockedSelectedAction.checkIfValid(potentialTarget_3)).thenReturn(true);
+		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_1)).thenReturn(true);
+		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_2)).thenReturn(false);
+		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_3)).thenReturn(true);
 		when(mockedGame.getPlayers()).thenReturn(new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_2, potentialTarget_3)));
 		actualValidTargets = testedPlayer.getValidTargets(mockedSelectedAction);
 		assertTrue(expectedValidTargets.containsAll(actualValidTargets));

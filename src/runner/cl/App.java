@@ -25,7 +25,7 @@ public class App {
 		game.setRoles(roles);
 		game.assignRoles();
 		while (isWinner(game.checkForWinner())) {
-			
+			promptPlayers(reader, game);
 			game.performActions();
 			game.killPlayers();
 			game.advance();
@@ -63,26 +63,19 @@ public class App {
 		
 		// Prompt for a role, once for each player.
 		for (int i = 0; i < numPlayers; i++) {
+			display(RoleOption.values());
 			System.out.println("Choose a Role to add.");
-			dispalyRoleList();
+			display(roles);
 			System.out.println("Enter a Number from 1 to " + (RoleOption.values().length));
 			choice = reader.nextInt() - 1; // Adjust to 0 index.
 			if (choice >= 0) {
-				roles.add(RoleFactory.createRole(RoleOption.values()[choice]));
+				roles.add(RoleFactory.createRole(RoleOption.values()[choice], game));
 			} else {
 				i--;
 				System.out.println("Invalid input, " + choice + ".  Try again ...");
 			}
 		}
 		return roles;
-	}
-	
-	private static void dispalyRoleList() {
-		int itemNo = 1;
-		for (RoleOption opt : RoleOption.values()) {
-			System.out.println(itemNo + ". " + opt.name());
-			itemNo++;
-		}
 	}
 	
 	// Display the winner, if there was one.  Return false unless there is a winner.
@@ -98,22 +91,45 @@ public class App {
 	}
 	
 	// Ask each player for an action:
-	private static void promptPlayers(Game game) {
+	private static void promptPlayers(Scanner reader, Game game) {
+		Action selectedAction;
+		Player selectedTarget;
 		for (Player player : game.getLivingPlayers()) {
-			
+			selectedAction = promptForAction(reader, player);
+			selectedTarget = promptForTarget(reader, player, selectedAction);
+			player.chooseAction(selectedAction, selectedTarget);
 		}
 	}
 	
 	// Prompt a single player for an action:
-	private static void promptForAction(Player player) {
+	private static Action promptForAction(Scanner reader, Player player) {
 		System.out.println(player.getName() + ", Choose your action:");
-		displayActions(player.getActions());
+		ArrayList<Action> validActions = player.getValidActions();
+		display(validActions);
+		int choice = reader.nextInt() - 1;
+		return validActions.get(choice);
 	}
 	
-	private static void displayActions(ArrayList<Action> actions) {
+	// Prompt a single player for a target:
+	private static Player promptForTarget(Scanner reader, Player player, Action selectedAction) {
+		System.out.println(player.getName() + ", Choose your target:");
+		ArrayList<Player> validTargets = selectedAction.getValidTargets();
+		display(validTargets);
+		int choice = reader.nextInt() - 1;
+		return validTargets.get(choice);
+	}
+	
+	private static void display(ArrayList objs) {
 		int itemNo = 1;
-		for (Action action : actions) {
-			System.out.println(itemNo + ". " + action.getName());
+		for (Object obj : objs) {
+			System.out.println(itemNo + ". " + obj.toString());
+			itemNo++;
+		}
+	}
+	private static void display(Object[] objs) {
+		int itemNo = 1;
+		for (Object obj : objs) {
+			System.out.println(itemNo + ". " + obj.toString());
 			itemNo++;
 		}
 	}

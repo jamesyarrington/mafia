@@ -26,7 +26,7 @@ public class RoleTest {
 
 	@Before
 	public void setUp() throws Exception {
-		testedRole = new Role(Faction.TOWN, mockedActions);
+		testedRole = new Role(Faction.TOWN, mockedActions, "testedRole");
 	}
 
 	@After
