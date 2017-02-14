@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import mafia.game.Action;
 import mafia.game.Game;
-import mafia.game.NoAction;
 import mafia.game.Role;
+import mafia.game.subclasses.action.NoAction;
 import mafia.values.Faction;
 import mafia.values.RoleOption;
 

@@ -7,37 +7,36 @@ import mafia.values.Status;
 
 public class Action {
 	protected String name;
-	private Status validTargetStatus;
-	private Status invalidTargetStatus;
-	private Phase validPhase;
-	private Status targetStatus;
-	private Status actorStatus;
-	private Game game;
+	protected Status validTargetStatus;
+	protected Status invalidTargetStatus;
+	protected ArrayList<Phase> validPhases;
+	protected Status targetStatus;
+	protected Status actorStatus;
+	protected Game game;
 	
-	public Action(Status actorStatus, Status targetStatus, Status validTargetStatus, Status invalidTargetStatus, Phase validPhase, Game game) {
+	public Action(Status actorStatus, Status targetStatus, Status validTargetStatus, Status invalidTargetStatus, ArrayList<Phase> validPhases, Game game, String name) {
 		this.actorStatus = actorStatus;
 		this.targetStatus = targetStatus;
 		this.validTargetStatus = validTargetStatus;
 		this.invalidTargetStatus = invalidTargetStatus;
-		this.validPhase = validPhase;
+		this.validPhases = validPhases;
 		this.game = game;
+		this.name = name;
 	}
 	public Action(Game game) {
 		this.game = game;
 	}
 	
 	
-	// Apply the appropriate status to the player performing the action, and that player's target.
+	// To be overwritten.
 	public void execute(Player actor, Player target) {
-		actor.addStatus(actorStatus);
-		target.addStatus(targetStatus);
+		// Do nothing.  This is overwritten in subclasses.
 	}
 	
 	// Return true if the player is a valid target for this action.
 	public boolean checkIfValidTarget(Player target) {
 		boolean chkValidStatus;
 		boolean chkInvalidStatus;
-		boolean chkValidPhase;
 		if (validTargetStatus == null) {
 			chkValidStatus = true;
 		} else {
@@ -51,6 +50,7 @@ public class Action {
 		return chkValidStatus && chkInvalidStatus;
 	}
 	
+	// Return an ArrayList of players that can be a valid target of this action.
 	public ArrayList<Player> getValidTargets() {
 		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
 		for (Player player : game.getPlayers()) {
@@ -61,8 +61,9 @@ public class Action {
 		return returnedPlayerArrayList;
 	}
 	
+	// Return true if the game's phase is a valid phase for this action.
 	public boolean checkIfValidPhase() {
-		return game.getPhase() == validPhase;
+		return validPhases.contains(game.getPhase());
 	}
 
 	@Override
