@@ -26,6 +26,52 @@ public class Action {
 	public Action(Game game) {
 		this.game = game;
 	}
+	public static Builder builder(Game game) {
+		return new Builder(game);
+	}
+	public static class Builder {
+		protected Status actorStatus;
+		protected Status targetStatus;
+		protected Status validTargetStatus;
+		protected Status invalidTargetStatus;
+		protected ArrayList<Phase> validPhases;
+		protected String name;
+		protected Game game;
+		
+		protected Builder(Game game) {
+			this.game = game;
+			actorStatus = Status.NONE;
+			targetStatus = Status.NONE;
+			validTargetStatus = Status.NONE;
+			invalidTargetStatus = Status.NONE;
+			
+			name = "Generic Action";
+			
+			validPhases = new ArrayList<Phase>();
+		}
+		
+		public Action build() {
+			return new Action(actorStatus, targetStatus, validTargetStatus, invalidTargetStatus, validPhases, game, name);
+		}
+		
+		// Variable setters
+		public Builder validTargetStatus(Status validTargetStatus) {
+			this.validTargetStatus = validTargetStatus;
+			return this;
+		}
+		public Builder invalidTargetStatus(Status invalidTargetStatus) {
+			this.invalidTargetStatus = invalidTargetStatus;
+			return this;
+		}
+		public Builder addValidPhase(Phase phase) {
+			validPhases.add(phase);
+			return this;
+		}
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+	}
 	
 	
 	// To be overwritten.
@@ -37,12 +83,12 @@ public class Action {
 	public boolean checkIfValidTarget(Player target) {
 		boolean chkValidStatus;
 		boolean chkInvalidStatus;
-		if (validTargetStatus == null) {
+		if (validTargetStatus == Status.NONE) {
 			chkValidStatus = true;
 		} else {
 			chkValidStatus = target.hasStatus(validTargetStatus);
 		}
-		if (invalidTargetStatus == null) {
+		if (invalidTargetStatus == Status.NONE) {
 			chkInvalidStatus = true;
 		} else {
 			chkInvalidStatus = !target.hasStatus(invalidTargetStatus);

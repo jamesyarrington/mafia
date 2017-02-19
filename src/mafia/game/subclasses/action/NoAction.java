@@ -21,7 +21,12 @@ public class NoAction extends Action {
 	@Override
 	public ArrayList<Player> getValidTargets() {
 		ArrayList<Player> no_choices =  new ArrayList<Player>();
-		no_choices.add(new NoPlayer());
+		no_choices.add(new NoPlayer("No Target"));
 		return no_choices;
+	}
+	
+	@Override
+	public boolean checkIfValidTarget(Player player) {
+		return true;
 	}
 }

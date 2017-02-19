@@ -19,19 +19,20 @@ public class Player {
 	private String dailyMessage;
 	
 	// When the player is created, get Team and available Actions from provided Role
-	public Player(String playerName, Role role, Game game) {
+	public Player(String name, Role role, Game game) {
 		this.role = role;
 		this.game = game;
 		this.dailyMessage = "";
+		this.name = name;
 //		team = role.getTeam();  // TODO: Return team-related actions
 //		team.addPlayer(this);
 		faction = role.getFaction();
-		name = playerName;
 		actions = role.getActions();
 		statuses = new ArrayList<Status>();
 	}
-	public Player() {
-		name = "No Target";
+	public Player(String name) {
+		this.name = name;
+		statuses = new ArrayList<Status>();
 	}
 	
 	// Return the faction from the team to which this player belongs.
@@ -55,15 +56,15 @@ public class Player {
 		}
 	}
 	
-	public ArrayList<Player> getValidTargets(Action potentialAction) {
-		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
-		for (Player player : game.getPlayers()) {
-			if (potentialAction.checkIfValidTarget(player)) {
-				returnedPlayerArrayList.add(player);
-			}
-		}
-		return returnedPlayerArrayList;
-	}
+//	public ArrayList<Player> getValidTargets(Action potentialAction) {
+//		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
+//		for (Player player : game.getPlayers()) {
+//			if (potentialAction.checkIfValidTarget(player)) {
+//				returnedPlayerArrayList.add(player);
+//			}
+//		}
+//		return returnedPlayerArrayList;
+//	}
 	
 	public ArrayList<Action> getValidActions() {
 		ArrayList<Action> validActions = new ArrayList<Action>();

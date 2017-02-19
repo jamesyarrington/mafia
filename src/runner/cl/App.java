@@ -95,6 +95,8 @@ public class App {
 		Action selectedAction;
 		Player selectedTarget;
 		for (Player player : game.getLivingPlayers()) {
+			System.out.println("Statuses:");
+			display(player.getStatuses());
 			selectedAction = promptForAction(reader, player);
 			selectedTarget = promptForTarget(reader, player, selectedAction);
 			player.chooseAction(selectedAction, selectedTarget);

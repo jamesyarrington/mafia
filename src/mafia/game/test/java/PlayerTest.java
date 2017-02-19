@@ -23,6 +23,7 @@ public class PlayerTest {
 	private ArrayList<Status> expectedStatus;
 	private ArrayList<Player> expectedValidTargets;
 	private ArrayList<Player> actualValidTargets;
+	private ArrayList<Action> mockedActions;
 	
 	@Mock
 	private Role mockedRole;	
@@ -30,8 +31,6 @@ public class PlayerTest {
 	private Game mockedGame;
 	@Mock
 	private Team mockedTeam;
-	@Mock
-	private ArrayList<Action> mockedActions;
 	@Mock
 	private Action mockedSelectedAction;
 	@Mock
@@ -42,10 +41,20 @@ public class PlayerTest {
 	private Player potentialTarget_2;
 	@Mock
 	private Player potentialTarget_3;
+	@Mock
+	private Action action1;
+	@Mock
+	private Action action2;
+	@Mock
+	private Action action3;
 	
 	@Before
 	public void setUp() throws Exception {
 		expectedStatus = new ArrayList<Status>();
+		mockedActions = new ArrayList<Action>();
+		mockedActions.add(action1);
+		mockedActions.add(action2);
+		mockedActions.add(action3);
 //		when(mockedRole.getTeam()).thenReturn(mockedTeam);
 		when(mockedRole.getActions()).thenReturn(mockedActions);
 //		when(mockedTeam.getFaction()).thenReturn(Faction.TOWN);
@@ -113,16 +122,28 @@ public class PlayerTest {
 		assertEquals("When action reports valid", testedPlayer.getTarget(), targetPlayer);
 	}
 
-	@Test
-	public void test_getValidTargets() {
-		expectedValidTargets = new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_3));
-		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_1)).thenReturn(true);
-		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_2)).thenReturn(false);
-		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_3)).thenReturn(true);
-		when(mockedGame.getPlayers()).thenReturn(new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_2, potentialTarget_3)));
-		actualValidTargets = testedPlayer.getValidTargets(mockedSelectedAction);
-		assertTrue(expectedValidTargets.containsAll(actualValidTargets));
-		assertTrue(actualValidTargets.containsAll(expectedValidTargets));
-	}
+//	@Test
+//	public void test_getValidTargets() {
+//		expectedValidTargets = new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_3));
+//		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_1)).thenReturn(true);
+//		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_2)).thenReturn(false);
+//		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_3)).thenReturn(true);
+//		when(mockedGame.getPlayers()).thenReturn(new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_2, potentialTarget_3)));
+//		actualValidTargets = testedPlayer.getValidTargets(mockedSelectedAction);
+//		assertTrue(expectedValidTargets.containsAll(actualValidTargets));
+//		assertTrue(actualValidTargets.containsAll(expectedValidTargets));
+//	}
 	
+	@Test
+	public void test_getValidActions() {
+		when(action1.checkIfValidPhase()).thenReturn(false);
+		when(action2.checkIfValidPhase()).thenReturn(true);
+		when(action3.checkIfValidPhase()).thenReturn(true);
+		ArrayList<Action> expectedValidActions = new ArrayList<Action>();
+		expectedValidActions.add(action2);
+		expectedValidActions.add(action3);
+		ArrayList<Action> actualValidActions = testedPlayer.getValidActions();
+		assertTrue(expectedValidActions.containsAll(actualValidActions));
+		assertTrue(actualValidActions.containsAll(expectedValidActions));
+	}
 }

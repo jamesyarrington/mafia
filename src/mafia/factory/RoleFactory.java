@@ -5,21 +5,34 @@ import java.util.ArrayList;
 import mafia.game.Action;
 import mafia.game.Game;
 import mafia.game.Role;
-import mafia.game.subclasses.action.NoAction;
-import mafia.values.Faction;
-import mafia.values.RoleOption;
+import mafia.game.subclasses.action.*;
+import mafia.values.*;
 
 public class RoleFactory {
+	static String name;
+	static Faction faction;
+	static ArrayList<Action> actions;
 	
 	public static Role createRole(RoleOption roleName, Game game) {
-		ArrayList<Action> actions = new ArrayList<Action>();
-		
+		actions = new ArrayList<Action>();
 		actions.add(new NoAction(game));
 		
 		switch (roleName) {
-		case TOWNSPERSON:	return new Role(Faction.TOWN, actions, "Townsperson");
-		case GOON:			return new Role(Faction.MAFIA, actions, "Goon");
-		default:			return null;
+		case TOWNSPERSON:
+			name = "Townsperson";
+			faction = Faction.TOWN;
+			break;
+		case GOON:
+			name = "Goon";
+			faction = Faction.MAFIA;
+			actions.add(StatusSetter.builder(game).
+					name("Kill").
+					targetStatus(Status.tobeKILLED).
+					invalidTargetStatus(Status.DEAD).
+					addValidPhase(Phase.NIGHT).build());
+			break;
+		default:
 		}
+		return new Role(faction, actions, name);
 	}
 }
