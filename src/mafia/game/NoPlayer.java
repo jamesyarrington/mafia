@@ -6,4 +6,7 @@ public class NoPlayer extends Player {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
+	public NoPlayer() {
+		super("No Player");
+	}
 }

@@ -26,6 +26,14 @@ public class Action {
 	public Action(Game game) {
 		this.game = game;
 	}
+	public Action(Status validTargetStatus, Status invalidTargetStatus, ArrayList<Phase> validPhases, Game game, String name) {
+		this.validTargetStatus = validTargetStatus;
+		this.invalidTargetStatus = invalidTargetStatus;
+		this.validPhases = validPhases;
+		this.game = game;
+		this.name = name;
+	}
+	
 	public static Builder builder(Game game) {
 		return new Builder(game);
 	}

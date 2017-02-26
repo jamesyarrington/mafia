@@ -16,6 +16,11 @@ public class RoleFactory {
 	public static Role createRole(RoleOption roleName, Game game) {
 		actions = new ArrayList<Action>();
 		actions.add(new NoAction(game));
+		actions.add(Vote.builder(game)
+				.name("Vote")
+				.invalidTargetStatus(Status.DEAD)
+				.addValidPhase(Phase.DAY)
+				.build());
 		
 		switch (roleName) {
 		case TOWNSPERSON:
@@ -25,11 +30,12 @@ public class RoleFactory {
 		case GOON:
 			name = "Goon";
 			faction = Faction.MAFIA;
-			actions.add(StatusSetter.builder(game).
-					name("Kill").
-					targetStatus(Status.tobeKILLED).
-					invalidTargetStatus(Status.DEAD).
-					addValidPhase(Phase.NIGHT).build());
+			actions.add(SetStatus.builder(game)
+					.name("Kill")
+					.invalidTargetStatus(Status.DEAD)
+					.addValidPhase(Phase.NIGHT)
+					.targetStatus(Status.tobeKILLED)
+					.build());
 			break;
 		default:
 		}

@@ -17,6 +17,7 @@ public class Player {
 	private ArrayList<Status> statuses;
 	private Role role;
 	private String dailyMessage;
+	private int votes;
 	
 	// When the player is created, get Team and available Actions from provided Role
 	public Player(String name, Role role, Game game) {
@@ -29,6 +30,7 @@ public class Player {
 		faction = role.getFaction();
 		actions = role.getActions();
 		statuses = new ArrayList<Status>();
+		votes = 0;
 	}
 	public Player(String name) {
 		this.name = name;
@@ -54,6 +56,16 @@ public class Player {
 		} else {
 			return false;
 		}
+	}
+	
+	// Vote for this player.
+	public void applyVote() {
+		votes++;
+	}
+	
+	// Clear votes.
+	public void clearVotes() {
+		votes = 0;
 	}
 	
 //	public ArrayList<Player> getValidTargets(Action potentialAction) {
@@ -120,6 +132,10 @@ public class Player {
 
 	public ArrayList<Action> getActions() {
 		return actions;
+	}
+
+	public int getVotes() {
+		return votes;
 	}
 
 	public Action getSelectedAction() {

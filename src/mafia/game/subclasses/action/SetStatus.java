@@ -8,9 +8,9 @@ import mafia.game.Player;
 import mafia.values.Phase;
 import mafia.values.Status;
 
-public class StatusSetter extends Action {
+public class SetStatus extends Action {
 
-	public StatusSetter(Status actorStatus, Status targetStatus, Status validTargetStatus, Status invalidTargetStatus,
+	public SetStatus(Status actorStatus, Status targetStatus, Status validTargetStatus, Status invalidTargetStatus,
 			ArrayList<Phase> validPhases, Game game, String name) {
 		super(actorStatus, targetStatus, validTargetStatus, invalidTargetStatus, validPhases, game, name);
 	}
@@ -30,7 +30,7 @@ public class StatusSetter extends Action {
 		}
 		@Override
 		public Action build() {
-			return new StatusSetter(actorStatus, targetStatus, validTargetStatus, invalidTargetStatus, validPhases, game, name);
+			return new SetStatus(actorStatus, targetStatus, validTargetStatus, invalidTargetStatus, validPhases, game, name);
 		}
 		
 		// New Variable Setters
