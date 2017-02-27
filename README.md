@@ -1,7 +1,18 @@
 # mafia
+
+## Game Description
 Mafia is a game typically between two teams, the mafia & town.
 
 ... More description of the game here ...
+
+## Running
+Currently, only a command-line version is available to run, the App in the runner.cl package.  It will:
+
+1. Prompt you for a list of players
+2. Prompt you to select roles (for as many players)
+3. Ask for the following until the game ends:
+  1. Action for each player
+  2. Target for each player.
 
 ## Classes
 Below is a description of each class.
