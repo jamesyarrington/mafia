@@ -91,6 +91,15 @@ public class GameTest {
 	}
 	
 	@Test
+	public void test_clearVotes() {
+		testedGame.assignRoles();
+		testedGame.clearVotes();
+		for ( Player player : testedGame.getPlayers()) {
+			verify(player, times(1)).clearVotes();
+		}
+	}
+	
+	@Test
 	public void test_advance() {
 		assertEquals("Starts at 0", 0, testedGame.getTurn());
 		assertEquals("Starts with NIGHT", Phase.NIGHT, testedGame.getPhase());
@@ -113,7 +122,39 @@ public class GameTest {
 		assertEquals(new ArrayList<Player>(Arrays.asList(player_1, player_3)), testedGame.killPlayers());
 		verify(player_1).addStatus(Status.DEAD);
 		verify(player_3).addStatus(Status.DEAD);
+		verify(player_1).removeStatus(Status.tobeKILLED);
+		verify(player_3).removeStatus(Status.tobeKILLED);
 		verify(player_2, never()).addStatus(Status.DEAD);
+	}
+	
+	@Test
+	public void test_getTopVoted() {
+		testedGame.assignRoles();
+		when(player_1.getVotes()).thenReturn(0, 0, 2);
+		when(player_2.getVotes()).thenReturn(3, 0, 1);
+		when(player_3.getVotes()).thenReturn(1, 0, 2);
+		// One winner:
+		assertEquals(player_2, testedGame.getTopVoted());
+		// No Votes:
+		assertTrue(testedGame.getTopVoted() instanceof NoPlayer);
+		// Tie:
+		assertTrue(testedGame.getTopVoted() instanceof NoPlayer);
+	}	
+	
+	@Test
+	public void test_killPlayers_VOTED() {
+		testedGame.assignRoles();
+		when(player_1.getVotes()).thenReturn(0, 0, 2);
+		when(player_2.getVotes()).thenReturn(3, 0, 1);
+		when(player_3.getVotes()).thenReturn(1, 0, 2);
+		// One winner:
+		assertEquals(new ArrayList<Player>(Arrays.asList(player_2)), testedGame.killPlayers());
+		verify(player_2).addStatus(Status.DEAD);
+		verify(player_2).removeStatus(Status.tobeKILLED);
+		// No Votes:
+		assertTrue(testedGame.killPlayers().isEmpty());
+		// Tie:
+		assertTrue(testedGame.killPlayers().isEmpty());
 	}
 	
 	@Test

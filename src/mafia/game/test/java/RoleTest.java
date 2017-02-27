@@ -20,8 +20,6 @@ public class RoleTest {
 	private Role testedRole;
 	
 	@Mock
-	private Team mockedTeam;
-	@Mock
 	private ArrayList<Action> mockedActions;
 
 	@Before

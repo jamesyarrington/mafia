@@ -11,7 +11,6 @@ import mafia.values.Status;
 public class Game {
 
 	private ArrayList<Player> players;
-	private ArrayList<Team> teams;
 	private ArrayList<Role> roles;
 	private String[] playerNames;
 	private final PlayerFactory pf;
@@ -76,6 +75,12 @@ public class Game {
 		for (Player player : players)
 			player.performAction();
 	}
+
+	// Iterate through all players, clearing any votes that were applied.
+	public void clearVotes() {
+		for (Player player : players)
+			player.clearVotes();
+	}
 	
 	// Advance phase, advancing the turn if going NIGHT -> DAY
 	public void advance() {
@@ -95,8 +100,9 @@ public class Game {
 				killedPlayers.add(player);
 			}
 		}
-		if (!(getTopVoted() instanceof NoPlayer)) {
-			killedPlayers.add(getTopVoted());
+		Player topVotedPlayer = getTopVoted();
+		if (!(topVotedPlayer instanceof NoPlayer)) {
+			killedPlayers.add(topVotedPlayer);
 		}
 		for (Player player : killedPlayers) {
 			player.addStatus(Status.DEAD);
@@ -106,18 +112,18 @@ public class Game {
 	
 	// Return the player with the highest vote count, or return NoPlayer if there is a tie.
 	public Player getTopVoted() {
-		ArrayList<Integer> voteCounts =  new ArrayList<Integer>();
-		ArrayList<Player> livingPlayers = getLivingPlayers();
 		ArrayList<Player> topVotedPlayers = new ArrayList<Player>();
 		int mostVotes = 0;
+		int playersVotes;
 		// Go through list of living players to find a list of players with the most votes.
 		for (Player player : getLivingPlayers()) {
-			if (player.getVotes() >= mostVotes) {
+			playersVotes = player.getVotes();
+			if (playersVotes >= mostVotes) {
 				// Add the player to the list if it has the most votes.
-				if (player.getVotes() > mostVotes) {
+				if (playersVotes > mostVotes) {
 					// Start a new list if there is a new most votes count
 					topVotedPlayers = new ArrayList<Player>();
-					mostVotes = player.getVotes();
+					mostVotes = playersVotes;
 				}
 				topVotedPlayers.add(player);
 			}
@@ -132,10 +138,6 @@ public class Game {
 	
 	// Setters:
 
-	public void setTeams(ArrayList<Team> teams) {
-		this.teams = teams;
-	}
-
 	public void setRoles(ArrayList<Role> roles) {
 		this.roles = roles;
 	}
@@ -146,10 +148,6 @@ public class Game {
 	
 	
 	// Getters:
-	
-	public ArrayList<Team> getTeams() {
-		return teams;
-	}
 
 	public ArrayList<Role> getRoles() {
 		return roles;
@@ -162,13 +160,6 @@ public class Game {
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
-	
-	
-	// Private Methods:
-	
-	private void addPlayer(Player player) {
-		players.add(player);
-	}
 
 	public Phase getPhase() {
 		return phase;
@@ -178,4 +169,9 @@ public class Game {
 		return turn;
 	}
 	
+	// Private Methods:
+	
+	private void addPlayer(Player player) {
+		players.add(player);
+	}
 }

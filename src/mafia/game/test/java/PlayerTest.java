@@ -30,8 +30,6 @@ public class PlayerTest {
 	@Mock
 	private Game mockedGame;
 	@Mock
-	private Team mockedTeam;
-	@Mock
 	private Action mockedSelectedAction;
 	@Mock
 	private Player targetPlayer;
@@ -55,9 +53,7 @@ public class PlayerTest {
 		mockedActions.add(action1);
 		mockedActions.add(action2);
 		mockedActions.add(action3);
-//		when(mockedRole.getTeam()).thenReturn(mockedTeam);
 		when(mockedRole.getActions()).thenReturn(mockedActions);
-//		when(mockedTeam.getFaction()).thenReturn(Faction.TOWN);
 		testedPlayer = new Player("testName", mockedRole, mockedGame);
 	}
 
@@ -67,23 +63,11 @@ public class PlayerTest {
 
 	@Test
 	public void player_constructor() {
-		// Verify appropriate methods were called:
-//		verify(mockedRole).getTeam();
 		verify(mockedRole).getActions();
-//		verify(mockedTeam).addPlayer(testedPlayer);
-		
-		// Verify properties set properly:
-//		assertEquals(mockedTeam, testedPlayer.getTeam());
 		assertEquals("testName", testedPlayer.getName());
 		assertEquals(mockedActions, testedPlayer.getActions());
 
 	}
-	
-//	@Test
-//	public void test_getFaction() {
-//		assertEquals(Faction.TOWN, testedPlayer.getFaction());
-//		verify(mockedTeam).getFaction();
-//	}
 	
 	@Test
 	public void test_performAction() {
@@ -121,18 +105,6 @@ public class PlayerTest {
 		assertEquals("When action reports valid", testedPlayer.getSelectedAction(), mockedSelectedAction);
 		assertEquals("When action reports valid", testedPlayer.getTarget(), targetPlayer);
 	}
-
-//	@Test
-//	public void test_getValidTargets() {
-//		expectedValidTargets = new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_3));
-//		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_1)).thenReturn(true);
-//		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_2)).thenReturn(false);
-//		when(mockedSelectedAction.checkIfValidTarget(potentialTarget_3)).thenReturn(true);
-//		when(mockedGame.getPlayers()).thenReturn(new ArrayList<Player>(Arrays.asList(potentialTarget_1, potentialTarget_2, potentialTarget_3)));
-//		actualValidTargets = testedPlayer.getValidTargets(mockedSelectedAction);
-//		assertTrue(expectedValidTargets.containsAll(actualValidTargets));
-//		assertTrue(actualValidTargets.containsAll(expectedValidTargets));
-//	}
 	
 	@Test
 	public void test_getValidActions() {
@@ -145,5 +117,17 @@ public class PlayerTest {
 		ArrayList<Action> actualValidActions = testedPlayer.getValidActions();
 		assertTrue(expectedValidActions.containsAll(actualValidActions));
 		assertTrue(actualValidActions.containsAll(expectedValidActions));
+	}
+	
+	@Test
+	public void test_votes() {
+		assertEquals(testedPlayer.getVotes(), 0);
+		testedPlayer.applyVote();
+		assertEquals(testedPlayer.getVotes(), 1);
+		testedPlayer.applyVote();
+		testedPlayer.applyVote();
+		assertEquals(testedPlayer.getVotes(), 3);
+		testedPlayer.clearVotes();
+		assertEquals(testedPlayer.getVotes(), 0);
 	}
 }

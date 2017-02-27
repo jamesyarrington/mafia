@@ -24,52 +24,51 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ActionTest {
 	
-	private Action testedAction;
+	protected Action testedAction;
 
-	private Status testedValidStatus = Status.BLOCKED;
-	private Status testedInvalidStatus = Status.tobeKILLED;
-	private Phase testedValidPhase = Phase.NIGHT;
-	private Phase testedInvalidPhase = Phase.DAY;
-	private ArrayList<Phase> validPhases = new ArrayList<Phase>();
-	private String testedName = "TheNameOfTheAction";
+	protected Status testedValidStatus = Status.BLOCKED;
+	protected Status testedInvalidStatus = Status.tobeKILLED;
+	protected Phase testedValidPhase = Phase.NIGHT;
+	protected Phase testedInvalidPhase = Phase.DAY;
+	protected ArrayList<Phase> validPhases = new ArrayList<Phase>();
+	protected String testedName = "TheNameOfTheAction";
 	
 	
 	@Mock
-	private Player mockedActor;
+	protected Player mockedActor;
 	@Mock
-	private Player mockedTarget;
+	protected Player mockedTarget;
 	@Mock
-	private Player mockedTarget2;
+	protected Player mockedTarget2;
 	@Mock
-	private Player mockedTarget3;
+	protected Player mockedTarget3;
 	@Mock
-	private Player mockedTarget4;
+	protected Player mockedTarget4;
 	@Mock
-	private Game mockedGame;
+	protected Game mockedGame;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		validPhases.add(testedValidPhase);
-		testedAction = new Action(Status.tobeKILLED, Status.DEAD, testedValidStatus, testedInvalidStatus, validPhases, mockedGame, testedName);
+		testedAction = Action.builder(mockedGame)
+				.invalidTargetStatus(testedInvalidStatus)
+				.validTargetStatus(testedValidStatus)
+				.name(testedName)
+				.addValidPhase(testedValidPhase)
+				.build();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		
 	}
 
-	@Test @Ignore
+	@Test
 	public void test_execute() {
 		// execute() does nothing in base class.
 		testedAction.execute(mockedActor, mockedTarget);
-		verify(mockedActor).addStatus(Status.tobeKILLED);
-		verify(mockedTarget).addStatus(Status.DEAD);
+		verifyZeroInteractions(mockedActor);
+		verifyZeroInteractions(mockedTarget);
 	}
 	
 	@Test

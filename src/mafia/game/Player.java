@@ -9,7 +9,6 @@ public class Player {
 
 	private String name;
 	private Faction faction;
-//	private Team team;
 	private Game game;
 	private ArrayList<Action> actions;
 	private Action selectedAction;
@@ -25,8 +24,6 @@ public class Player {
 		this.game = game;
 		this.dailyMessage = "";
 		this.name = name;
-//		team = role.getTeam();  // TODO: Return team-related actions
-//		team.addPlayer(this);
 		faction = role.getFaction();
 		actions = role.getActions();
 		statuses = new ArrayList<Status>();
@@ -68,16 +65,8 @@ public class Player {
 		votes = 0;
 	}
 	
-//	public ArrayList<Player> getValidTargets(Action potentialAction) {
-//		ArrayList<Player> returnedPlayerArrayList = new ArrayList<Player>();
-//		for (Player player : game.getPlayers()) {
-//			if (potentialAction.checkIfValidTarget(player)) {
-//				returnedPlayerArrayList.add(player);
-//			}
-//		}
-//		return returnedPlayerArrayList;
-//	}
 	
+	// Return a list of actions that are available for the current phase.
 	public ArrayList<Action> getValidActions() {
 		ArrayList<Action> validActions = new ArrayList<Action>();
 		for (Action action : actions) {
@@ -125,10 +114,6 @@ public class Player {
 	public Role getRole() {
 		return role;
 	}
-
-//	public Team getTeam() {
-//		return team;
-//	}
 
 	public ArrayList<Action> getActions() {
 		return actions;

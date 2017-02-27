@@ -28,6 +28,7 @@ public class App {
 			promptPlayers(reader, game);
 			game.performActions();
 			game.killPlayers();
+			game.clearVotes();
 			game.advance();
 		}
 		
@@ -135,14 +136,4 @@ public class App {
 			itemNo++;
 		}
 	}
-	
-//	private static RoleOption getRoleEnum(String stringRole) {
-//		RoleOption foundEnum = RoleOption.INVALID;
-//		for (RoleOption opt : RoleOption.values()) {
-//			if (opt.name().equals(stringRole)) {
-//				foundEnum = opt;
-//			}
-//		}
-//		return foundEnum;
-//	}
 }

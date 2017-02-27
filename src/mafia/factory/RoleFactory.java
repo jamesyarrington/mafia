@@ -23,10 +23,12 @@ public class RoleFactory {
 				.build());
 		
 		switch (roleName) {
+		
 		case TOWNSPERSON:
 			name = "Townsperson";
 			faction = Faction.TOWN;
 			break;
+			
 		case GOON:
 			name = "Goon";
 			faction = Faction.MAFIA;
@@ -37,6 +39,7 @@ public class RoleFactory {
 					.targetStatus(Status.tobeKILLED)
 					.build());
 			break;
+			
 		default:
 		}
 		return new Role(faction, actions, name);
